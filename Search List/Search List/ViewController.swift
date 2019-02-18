@@ -15,6 +15,14 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
     }
 
-
+    @IBAction func inputForSearchTextField(_ sender: UITextField) {
+    }
+    
+    @IBAction func googleSearchButton(_ sender: UIButton) {
+    }
+    
+    @IBOutlet weak var searchResultTableView: UITableView!
+    
+    
 }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -29,6 +29,9 @@
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
+                                        <connections>
+                                            <action selector="inputForSearchTextField:" destination="BYZ-38-t0r" eventType="editingDidEnd" id="RXf-lS-Jgl"/>
+                                        </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a1O-EG-sQX">
                                         <rect key="frame" x="0.0" y="51.666666666666671" width="343" height="35.666666666666671"/>
@@ -36,10 +39,40 @@
                                             <constraint firstAttribute="width" secondItem="a1O-EG-sQX" secondAttribute="height" multiplier="48:5" id="np2-Jt-G24"/>
                                         </constraints>
                                         <state key="normal" title="Google Search"/>
+                                        <connections>
+                                            <action selector="googleSearchButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XDJ-FQ-dGg"/>
+                                        </connections>
                                     </button>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hMw-s7-CMq">
                                         <rect key="frame" x="0.0" y="103.33333333333331" width="343" height="598.66666666666674"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchResultTableViewCell" id="9Im-Bi-yRV" customClass="SearchResultTableViewCell" customModule="Search_List" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="28" width="343" height="44"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9Im-Bi-yRV" id="LYE-oc-tvX">
+                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="43.666666666666664"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ka-mz-hmr">
+                                                            <rect key="frame" x="15" y="11" width="313" height="21"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="2Ka-mz-hmr" firstAttribute="trailing" secondItem="LYE-oc-tvX" secondAttribute="trailingMargin" id="Biw-Zl-5xO"/>
+                                                        <constraint firstItem="2Ka-mz-hmr" firstAttribute="leading" secondItem="LYE-oc-tvX" secondAttribute="leadingMargin" id="R1t-hC-Wek"/>
+                                                        <constraint firstAttribute="bottomMargin" secondItem="2Ka-mz-hmr" secondAttribute="bottom" constant="1" id="bkM-Gp-ymK"/>
+                                                        <constraint firstItem="2Ka-mz-hmr" firstAttribute="top" secondItem="LYE-oc-tvX" secondAttribute="topMargin" id="dRA-CB-I3s"/>
+                                                    </constraints>
+                                                </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="linkLabel" destination="2Ka-mz-hmr" id="35l-0a-tUC"/>
+                                                </connections>
+                                            </tableViewCell>
+                                        </prototypes>
                                     </tableView>
                                 </subviews>
                             </stackView>
@@ -53,10 +86,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="searchResultTableView" destination="hMw-s7-CMq" id="o28-IY-yxe"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
+            <point key="canvasLocation" x="136.80000000000001" y="133.00492610837438"/>
         </scene>
     </scenes>
 </document>
