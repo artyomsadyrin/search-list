@@ -84,9 +84,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     private func startSearch(for inputForSearch: UITextField) {
         searchResults = [String]()
-        if let inputForSearch = inputForSearchTextField.text?.lowercased() {
+        if let inputForSearch = inputForSearchTextField.text {
             for value in tempData {
-                if value.lowercased().contains(inputForSearch) {
+                if value.contains(inputForSearch) {
                     searchResults.append(value)
                 }
             }
