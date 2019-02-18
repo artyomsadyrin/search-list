@@ -21,13 +21,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: Properties
     
+    private let resultGetter = ResultsGetter()
+    
     @IBOutlet weak var inputForSearchTextField: UITextField!
     
     @IBOutlet weak var googleSearchButtonOutlet: UIButton!
     
     @IBOutlet weak var searchResultTableView: UITableView!
-    
-    private var tempData = ["link 1 from search result", "link 2 from search result", "link 3 from search result"]
     
     private var searchResults = [String]()
     
@@ -85,14 +85,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     private func startSearch(for inputForSearch: UITextField) {
         searchResults = [String]()
         if let inputForSearch = inputForSearchTextField.text {
-            for value in tempData {
-                if value.contains(inputForSearch) {
-                    searchResults.append(value)
-                }
+            resultGetter.getResults(for: inputForSearch) { (rawData) in
+                print("OK")
             }
-            print("Data: \(tempData), Result: \(searchResults), parameter: \(inputForSearch)")
-            
-            
         } else {
             showErrorAlert()
         }

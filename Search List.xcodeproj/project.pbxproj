@@ -14,6 +14,7 @@
 		8E5AC6E5221AA3C90057AECD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E5AC6E4221AA3C90057AECD /* Assets.xcassets */; };
 		8E5AC6E8221AA3C90057AECD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E5AC6E6221AA3C90057AECD /* LaunchScreen.storyboard */; };
 		8E5AC6F0221AADE30057AECD /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5AC6EF221AADE30057AECD /* SearchResultTableViewCell.swift */; };
+		8E9E59A5221AF77B00E7F73A /* ResultsGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9E59A4221AF77B00E7F73A /* ResultsGetter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		8E5AC6E7221AA3C90057AECD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8E5AC6E9221AA3C90057AECD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E5AC6EF221AADE30057AECD /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
+		8E9E59A4221AF77B00E7F73A /* ResultsGetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsGetter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				8E5AC6E4221AA3C90057AECD /* Assets.xcassets */,
 				8E5AC6E6221AA3C90057AECD /* LaunchScreen.storyboard */,
 				8E5AC6E9221AA3C90057AECD /* Info.plist */,
+				8E9E59A4221AF77B00E7F73A /* ResultsGetter.swift */,
 			);
 			path = "Search List";
 			sourceTree = "<group>";
@@ -88,7 +91,6 @@
 				7978531F40298E3A9FF9AC3A /* Pods-Search List.debug.xcconfig */,
 				5A0EABBAAB999A65876151B3 /* Pods-Search List.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -215,6 +217,7 @@
 				8E5AC6E0221AA3C50057AECD /* ViewController.swift in Sources */,
 				8E5AC6DE221AA3C50057AECD /* AppDelegate.swift in Sources */,
 				8E5AC6F0221AADE30057AECD /* SearchResultTableViewCell.swift in Sources */,
+				8E9E59A5221AF77B00E7F73A /* ResultsGetter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
