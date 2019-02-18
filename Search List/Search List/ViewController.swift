@@ -18,7 +18,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchResultTableView.delegate = self
         inputForSearchTextField.delegate = self
     }
-
+    
     // MARK: Properties
     
     @IBOutlet weak var inputForSearchTextField: UITextField!
@@ -51,13 +51,32 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
     
-    // MARK: Search Actions
+    // MARK: Text Field Delegate
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         startSearch(for: textField)
         return true
     }
+    
+    // MARK: General Methods
+    
+    private func showErrorAlert() {
+        let alert = UIAlertController(
+            title: "Search failed",
+            message: "Couldn't read text from search field",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(
+            title: "OK",
+            style: .default
+        ))
+        
+        present(alert, animated: true)
+    }
+    
+    // MARK: Search Actions
     
     @IBAction func googleSearchButton(_ sender: UIButton) {
         startSearch(for: inputForSearchTextField)
@@ -67,11 +86,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchResults = [String]()
         if let inputForSearch = inputForSearchTextField.text?.lowercased() {
             for value in tempData {
-                if value.contains(inputForSearch) {
+                if value.lowercased().contains(inputForSearch) {
                     searchResults.append(value)
                 }
             }
             print("Data: \(tempData), Result: \(searchResults), parameter: \(inputForSearch)")
+            
+            
+        } else {
+            showErrorAlert()
         }
         searchResultTableView.reloadData()
     }
