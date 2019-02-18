@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate
 {
     
     override func viewDidLoad() {
@@ -16,7 +16,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Do any additional setup after loading the view, typically from a nib.
         searchResultTableView.dataSource = self
         searchResultTableView.delegate = self
-        
+        inputForSearchTextField.delegate = self
     }
 
     // MARK: Properties
@@ -27,7 +27,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var searchResultTableView: UITableView!
     
-    private var searchResults = ["link 1 from search result", "link 2 from search result", "link 3 from search result"]
+    private var tempData = ["link 1 from search result", "link 2 from search result", "link 3 from search result"]
+    
+    private var searchResults = [String]()
     
     // MARK: Table View Data Source
     
@@ -51,13 +53,30 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: Search Actions
     
-    @IBAction func googleSearchButton(_ sender: UIButton) {
-        
-        
-        
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        startSearch(for: textField)
+        return true
     }
     
+    @IBAction func googleSearchButton(_ sender: UIButton) {
+        startSearch(for: inputForSearchTextField)
+    }
+    
+    private func startSearch(for inputForSearch: UITextField) {
+        searchResults = [String]()
+        if let inputForSearch = inputForSearchTextField.text?.lowercased() {
+            for value in tempData {
+                if value.contains(inputForSearch) {
+                    searchResults.append(value)
+                }
+            }
+            print("Data: \(tempData), Result: \(searchResults), parameter: \(inputForSearch)")
+        }
+        searchResultTableView.reloadData()
+    }
 }
+
 
 extension UIButton
 {
