@@ -28,10 +28,7 @@
                                         </constraints>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
-                                        <connections>
-                                            <action selector="inputForSearchTextField:" destination="BYZ-38-t0r" eventType="editingDidEnd" id="RXf-lS-Jgl"/>
-                                        </connections>
+                                        <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a1O-EG-sQX">
                                         <rect key="frame" x="0.0" y="51.666666666666671" width="343" height="35.666666666666671"/>
@@ -39,6 +36,17 @@
                                             <constraint firstAttribute="width" secondItem="a1O-EG-sQX" secondAttribute="height" multiplier="48:5" id="np2-Jt-G24"/>
                                         </constraints>
                                         <state key="normal" title="Google Search"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="googleSearchButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XDJ-FQ-dGg"/>
                                         </connections>
@@ -55,7 +63,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ka-mz-hmr">
-                                                            <rect key="frame" x="15" y="11" width="313" height="21"/>
+                                                            <rect key="frame" x="15" y="11" width="352" height="21"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -87,6 +95,8 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="googleSearchButtonOutlet" destination="a1O-EG-sQX" id="NeG-iQ-Wwv"/>
+                        <outlet property="inputForSearchTextField" destination="lRc-NK-oew" id="EYU-YN-qZN"/>
                         <outlet property="searchResultTableView" destination="hMw-s7-CMq" id="o28-IY-yxe"/>
                     </connections>
                 </viewController>
