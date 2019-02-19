@@ -11,12 +11,12 @@ import SwiftyJSON
 
 class ResultsGetter
 {
-    func getResults(for inputForSearch: String, completion: @escaping (String?) -> Void) {
+    func getJSONFromSearchResults(for inputForSearch: String, completionHandler: @escaping (String?) -> Void) {
         
         let apiKey = "AIzaSyBOjLBG5EgXokhtMXjkGfmnQi2gzI2ydO0"
         let bundleId = "io.github.artyomsadyrin.Search-List"
         let searchEngineId = "013192253000657877849:nt00ris8vlw"
-        let serverAddress = String(format: "https://www.googleapis.com/customsearch/v1?q=%@&cx=%@&key=%@","\(inputForSearch)",searchEngineId, apiKey)
+        let serverAddress = String(format: "https://www.googleapis.com/customsearch/v1?q=%@&cx=%@&key=%@","\(inputForSearch)", searchEngineId, apiKey)
         
         
         let url = serverAddress.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
@@ -27,20 +27,20 @@ class ResultsGetter
         
         let session = URLSession.shared
         
-        let datatask = session.dataTask(with: request as URLRequest) { (data, response, error) in
-            do{
-                if let jsonResult = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary{
-                    print("asyncResult\(jsonResult)")
+        let datatask = session.dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
+            if let error = error {
+                print("Error:\n\(error)")
+                DispatchQueue.main.async {
+                    completionHandler(nil)
                 }
-                
-            }
-            catch let error as NSError{
-                print(error.localizedDescription)
+            } else {
+                let dataString = String(data: data!, encoding: String.Encoding.utf8)!
+                print("JSON Result\n\(String(describing: dataString))")
+                DispatchQueue.main.async {
+                    completionHandler(dataString)
+                }
             }
         }
         datatask.resume()
-        
-        
     }
- 
 }

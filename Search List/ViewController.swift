@@ -29,6 +29,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var searchResultTableView: UITableView!
     
+    private var linksFromResult: Result?
+    
     private var searchResults = [String]()
     
     // MARK: Table View Data Source
@@ -64,7 +66,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     private func showErrorAlert() {
         let alert = UIAlertController(
             title: "Search failed",
-            message: "Couldn't read text from search field",
+            message: "Couldn't read text from the search field",
             preferredStyle: .alert
         )
         
@@ -84,10 +86,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     private func startSearch(for inputForSearch: UITextField) {
         searchResults = [String]()
-        if let inputForSearch = inputForSearchTextField.text {
-            resultGetter.getResults(for: inputForSearch) { (rawData) in
-                print("OK")
-            }
+        if let inputForSearch = inputForSearchTextField.text, !inputForSearch.isEmpty {
+            linksFromResult = Result(for: inputForSearch)
         } else {
             showErrorAlert()
         }
