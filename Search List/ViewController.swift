@@ -83,9 +83,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if let searchDidEndObserver = searchDidEndObserver, let searchShouldEndObserver = searchShouldEndObserver {
+        if let searchDidEndObserver = searchDidEndObserver, let searchShouldEndObserver = searchShouldEndObserver, let errorInRequestObserver = errorInRequestObserver {
             NotificationCenter.default.removeObserver(searchDidEndObserver)
             NotificationCenter.default.removeObserver(searchShouldEndObserver)
+            NotificationCenter.default.removeObserver(errorInRequestObserver)
         }
     }
     
