@@ -13,12 +13,11 @@ class ResultsGetter
 {
     func getJSONFromSearchResults(for inputForSearch: String, completionHandler: @escaping (String) -> Void) {
         
-        // apiKey and searchEngineId is a private information
+        // apiKey and searchEngineId is a private information. To get yours please visit https://developers.google.com/custom-search/v1/overview
         let apiKey = "AIzaSyBOjLBG5EgXokhtMXjkGfmnQi2gzI2ydO0"
         let bundleId = "io.github.artyomsadyrin.Search-List"
         let searchEngineId = "013192253000657877849:nt00ris8vlw"
         let serverAddress = String(format: "https://www.googleapis.com/customsearch/v1?q=%@&cx=%@&key=%@","\(inputForSearch)", searchEngineId, apiKey)
-        
         
         let url = serverAddress.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         let finalUrl = URL(string: url!)
