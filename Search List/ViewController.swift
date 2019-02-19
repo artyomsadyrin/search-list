@@ -29,6 +29,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var searchResultTableView: UITableView!
     
+    private var linksFromResult: Result?
+    
     private var searchResults = [String]()
     
     // MARK: Table View Data Source
@@ -85,9 +87,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     private func startSearch(for inputForSearch: UITextField) {
         searchResults = [String]()
         if let inputForSearch = inputForSearchTextField.text, !inputForSearch.isEmpty {
-            resultGetter.getResults(for: inputForSearch) { (rawData) in
-                print("OK")
-            }
+            linksFromResult = Result(for: inputForSearch)
         } else {
             showErrorAlert()
         }

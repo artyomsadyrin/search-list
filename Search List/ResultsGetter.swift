@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class ResultsGetter
 {
-    func getResults(for inputForSearch: String, completionHandler: @escaping (String?) -> Void) {
+    func getJSONFromSearchResults(for inputForSearch: String, completionHandler: @escaping (String?) -> Void) {
         
         let apiKey = "AIzaSyBOjLBG5EgXokhtMXjkGfmnQi2gzI2ydO0"
         let bundleId = "io.github.artyomsadyrin.Search-List"
