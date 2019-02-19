@@ -75,15 +75,15 @@
 		8E5AC6DC221AA3C50057AECD /* Search List */ = {
 			isa = PBXGroup;
 			children = (
-				8E5AC6DD221AA3C50057AECD /* AppDelegate.swift */,
 				8E5AC6DF221AA3C50057AECD /* ViewController.swift */,
 				8E5AC6EF221AADE30057AECD /* SearchResultTableViewCell.swift */,
+				8E8ECFC2221C00BF00C5AFB2 /* Result.swift */,
+				8E9E59A4221AF77B00E7F73A /* ResultsGetter.swift */,
 				8E5AC6E1221AA3C50057AECD /* Main.storyboard */,
 				8E5AC6E4221AA3C90057AECD /* Assets.xcassets */,
 				8E5AC6E6221AA3C90057AECD /* LaunchScreen.storyboard */,
+				8E5AC6DD221AA3C50057AECD /* AppDelegate.swift */,
 				8E5AC6E9221AA3C90057AECD /* Info.plist */,
-				8E9E59A4221AF77B00E7F73A /* ResultsGetter.swift */,
-				8E8ECFC2221C00BF00C5AFB2 /* Result.swift */,
 			);
 			path = "Search List";
 			sourceTree = "<group>";

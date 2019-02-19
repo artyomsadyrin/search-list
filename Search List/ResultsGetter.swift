@@ -29,9 +29,9 @@ class ResultsGetter
         
         let datatask = session.dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
             if let error = error {
-                print("Error:\n\(error)")
+                print("Error:\n\(error.localizedDescription)")
                 DispatchQueue.main.async {
-                    completionHandler(nil)
+                    completionHandler(error.localizedDescription)
                 }
             } else {
                 let dataString = String(data: data!, encoding: String.Encoding.utf8)!

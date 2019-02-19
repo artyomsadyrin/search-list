@@ -9,10 +9,17 @@
 import Foundation
 import SwiftyJSON
 
-class Result {
+protocol ResultDelegate: class {
+    func updateSearchResultTableView()
+}
+
+class Result
+{
     let inputForSearch: String
-    var link: [String]?
+    var links: [String]?
+    var totalResults: Int?
     var failed: Bool
+    weak var delegate: ResultDelegate?
     
     init(for inputForSearch: String) {
         self.inputForSearch = inputForSearch
@@ -32,16 +39,26 @@ class Result {
             
             if let data = jsonResults.data(using: .utf8) {
                 if let json = try? JSON(data: data) {
-                    let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }
-                    self.link = linksFromJSON
-                    if let linksForPrint = self.link {
-                        print("Links:\n\(linksForPrint.joined(separator: "\n"))")
-                        //self.delegate?.updateCityTable()
+                    
+                    let totalResultsFromJSON = json["searchInformation"]["totalResults"].stringValue
+                    if let totalResultsInInt = Int(totalResultsFromJSON) {
+                        // Temp solution
+                        self.totalResults = 10
+                        //self.totalResults = totalResultsInInt
+                        self.delegate?.updateSearchResultTableView()
+                        print("Total Results: \(String(describing: self.totalResults))")
+                    } else {
+                        print("Can't get total results.")
                     }
-                }
+                    
+                    let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }
+                    self.links = linksFromJSON
+                    self.delegate?.updateSearchResultTableView()
+                    print("Links:\n\(String(describing: self.links))")
             }
         }
     }
     
+}
 }
 

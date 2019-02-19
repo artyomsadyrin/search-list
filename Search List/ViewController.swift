@@ -8,9 +8,9 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, ResultDelegate
 {
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -29,14 +29,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var searchResultTableView: UITableView!
     
-    private var linksFromResult: Result?
-    
-    private var searchResults = [String]()
+    private var result: Result?
     
     // MARK: Table View Data Source
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchResults.count
+        return result?.totalResults ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -46,7 +44,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             fatalError("The dequeued cell is not an instance of SearchResultTableViewCell.")
         }
         
-        let link = searchResults[indexPath.row]
+        let link = result?.links?[indexPath.row]
         
         cell.linkLabel.text = link
         
@@ -63,19 +61,41 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: General Methods
     
-    private func showErrorAlert() {
-        let alert = UIAlertController(
-            title: "Search failed",
-            message: "Couldn't read text from the search field",
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(UIAlertAction(
-            title: "OK",
-            style: .default
-        ))
-        
-        present(alert, animated: true)
+    private func showErrorAlert(errorCode: String) {
+        if errorCode == "400" {
+            let alert = UIAlertController(
+                title: "Search failed",
+                message: "Couldn't read text from the search field",
+                preferredStyle: .alert
+            )
+            
+            alert.addAction(UIAlertAction(
+                title: "OK",
+                style: .default
+            ))
+            
+            present(alert, animated: true)
+        } else {
+            let alert = UIAlertController(
+                title: "Search failed",
+                message: "Couldn't read text from the search field",
+                preferredStyle: .alert
+            )
+            
+            alert.addAction(UIAlertAction(
+                title: "OK",
+                style: .default
+            ))
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateSearchResultTableView()
+    }
+    
+    func updateSearchResultTableView() {
+        searchResultTableView.reloadData()
     }
     
     // MARK: Search Actions
@@ -85,11 +105,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     private func startSearch(for inputForSearch: UITextField) {
-        searchResults = [String]()
         if let inputForSearch = inputForSearchTextField.text, !inputForSearch.isEmpty {
-            linksFromResult = Result(for: inputForSearch)
+            result = Result(for: inputForSearch)
+            result?.delegate = self
         } else {
-            showErrorAlert()
+            showErrorAlert(errorCode: "400")
         }
         searchResultTableView.reloadData()
     }
