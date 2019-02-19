@@ -21,7 +21,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: Properties
     
-    enum invalidInput: Error {
+    enum searchFailedError: Error {
         case badInput
     }
     
@@ -94,7 +94,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         switch error {
             
-        case invalidInput.badInput:
+        case searchFailedError.badInput:
             let alert = UIAlertController(
                 title: "Search failed",
                 message: "Couldn't read text from the search field or the search field is empty. Try another keyword",
@@ -146,6 +146,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // Check for valid & empty string and init model
     private func startSearch(for inputForSearch: UITextField) {
         googleSearchButtonOutlet.setTitle("Stop", for: [])
+        
         errorInRequestObserver = NotificationCenter.default.addObserver(
             forName: .ErrorInRequestIsHappened,
             object: nil,
@@ -164,7 +165,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 result = Result(for: inputWithoutWhipespaces)
                 result?.delegate = self
             } else {
-                showErrorAlert(error: invalidInput.badInput)
+                showErrorAlert(error: searchFailedError.badInput)
             }
         }
     }
