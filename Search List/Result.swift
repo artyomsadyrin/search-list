@@ -22,6 +22,7 @@ class Result
     var totalResults: Int?
     var isFailed: Bool
     weak var delegate: ResultDelegate?
+    //private var searchShouldEndObserver: NSObjectProtocol?
     
     //MARK: Init
     
@@ -42,6 +43,8 @@ class Result
                 self.isFailed = true
                 return
             }
+    
+            // TO-DO: Do I need change some properties to nil here?
             
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 // Read JSON from the Custom Search JSON API and set a model's properties

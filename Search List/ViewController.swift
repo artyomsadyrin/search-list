@@ -33,8 +33,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 queue: OperationQueue.main,
                 using: { notification in
                     self.googleSearchButtonOutlet.setTitle("Google Search", for: [])
-            }
-            )
+            })
         }
     }
     
@@ -126,7 +125,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: Search Actions
     
     @IBAction func googleSearchButton(_ sender: UIButton) {
-        startSearch(for: inputForSearchTextField)
+        if sender.currentTitle == "Google Search" {
+            startSearch(for: inputForSearchTextField)
+        } else if sender.currentTitle == "Stop" {
+            NotificationCenter.default.post(name: .SearchShouldEnd, object: nil)
+            sender.setTitle("Google Search", for: [])
+        }
     }
     
     // Check for valid & empty string and init model
@@ -180,5 +184,5 @@ extension UIButton
 }
 
 extension Notification.Name {
-    static let SearchDidStart = Notification.Name("SearchDidStart")
+    static let SearchShouldEnd = Notification.Name("SearchShouldEnd")
 }
