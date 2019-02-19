@@ -11,8 +11,9 @@ import SwiftyJSON
 
 class ResultsGetter
 {
-    func getJSONFromSearchResults(for inputForSearch: String, completionHandler: @escaping (String?) -> Void) {
+    func getJSONFromSearchResults(for inputForSearch: String, completionHandler: @escaping (String) -> Void) {
         
+        // apiKey and searchEngineId is a private information
         let apiKey = "AIzaSyBOjLBG5EgXokhtMXjkGfmnQi2gzI2ydO0"
         let bundleId = "io.github.artyomsadyrin.Search-List"
         let searchEngineId = "013192253000657877849:nt00ris8vlw"
@@ -27,6 +28,7 @@ class ResultsGetter
         
         let session = URLSession.shared
         
+        // Get a JSON from the Custom Search JSON API
         let datatask = session.dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
             if let error = error {
                 print("Error:\n\(error.localizedDescription)")

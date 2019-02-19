@@ -53,6 +53,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: Text Field Delegate
     
+    // Hide keyboard by press a return button and starting a search
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         startSearch(for: textField)
@@ -62,6 +63,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: General Methods
     
     private func showErrorAlert(errorCode: String) {
+        
         if errorCode == "400" {
             let alert = UIAlertController(
                 title: "Search failed",
@@ -91,7 +93,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        updateSearchResultTableView()
+        //updateSearchResultTableView()
     }
     
     func updateSearchResultTableView() {
@@ -104,6 +106,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         startSearch(for: inputForSearchTextField)
     }
     
+    // Check for valid string and if string is not empty and made model's init
     private func startSearch(for inputForSearch: UITextField) {
         if let inputForSearch = inputForSearchTextField.text, !inputForSearch.isEmpty {
             result = Result(for: inputForSearch)
@@ -118,6 +121,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 extension UIButton
 {
+    // Add to button "Google Search" a little rounding and a border
     @IBInspectable var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius

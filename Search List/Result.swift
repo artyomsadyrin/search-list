@@ -37,6 +37,7 @@ class Result
                 return
             }
             
+            // Read JSON from the Custom Search JSON API and set a model's properties
             if let data = jsonResults.data(using: .utf8) {
                 if let json = try? JSON(data: data) {
                     
