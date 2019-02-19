@@ -38,7 +38,7 @@ class Result
         
         let resultGetter = ResultsGetter()
         
-        resultGetter.getJSONFromSearchResults(for: inputForSearch) { (jsonResults) in
+        resultGetter.getJSONFromSearchResults(for: inputForSearch) { (jsonResults, error) in
             guard let jsonResults = jsonResults else {
                 self.isFailed = true
                 return

@@ -14,15 +14,15 @@ class ResultsGetter
     private var currentDataTask: URLSessionTask?
     private var searchShouldEndObserver: NSObjectProtocol?
     
-    func getJSONFromSearchResults(for inputForSearch: String, completionHandler: @escaping (String?) -> Void) {
+    func getJSONFromSearchResults(for inputForSearch: String, completionHandler: @escaping (String?, Error?) -> Void) {
         
         // apiKey and searchEngineId is a private information and not allowed to use without permission. To get yours please visit https://developers.google.com/custom-search/v1/overview
         let apiKey = "AIzaSyBOjLBG5EgXokhtMXjkGfmnQi2gzI2ydO0"
         let bundleId = "io.github.artyomsadyrin.Search-List"
         let searchEngineId = "013192253000657877849:nt00ris8vlw"
-        // Index of the first result to return from the search
-        let startIndex = String(6)
-        let numberOfReturningResults = String(5)
+        // Index of the first result to return from the search. Max = 100
+        let startIndex = String(1)
+        let numberOfReturningResults = String(10)
         let serverAddress = String(format: "https://www.googleapis.com/customsearch/v1?q=%@&cx=%@&key=%@&start=%@&num=%@", inputForSearch, searchEngineId, apiKey, startIndex, numberOfReturningResults)
         
         
@@ -47,20 +47,19 @@ class ResultsGetter
                 })
                 
                 if let error = error {
-                    print("Error:\n\(error.localizedDescription)")
+                    let postedError: [String: Error] = [error.localizedDescription: error]
+                    print("Error:\n\(String(describing: postedError.keys.first))")
                     DispatchQueue.main.async {
+                        completionHandler(nil, error)
                         NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
-                        completionHandler(error.localizedDescription)
+                        NotificationCenter.default.post(name: .ErrorInRequestIsHappened, object: nil, userInfo: postedError)
                     }
                 } else {
                     let dataString = String(data: data!, encoding: String.Encoding.utf8)!
                     print("JSON Result\n\(String(describing: dataString))")
                     DispatchQueue.main.async {
                         NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
-                        completionHandler(dataString)
-                        if let observer = self?.searchShouldEndObserver {
-                            NotificationCenter.default.removeObserver(observer)
-                        }
+                        completionHandler(dataString, nil)
                     }
                 }
             }
@@ -72,4 +71,5 @@ class ResultsGetter
 
 extension Notification.Name {
     static let SearchDidEnd = Notification.Name("SearchDidEnd")
+    static let ErrorInRequestIsHappened = Notification.Name("ErrorInRequestIsHappened")
 }

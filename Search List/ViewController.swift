@@ -21,13 +21,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: Properties
     
+    enum invalidInput: Error {
+        case badInput
+    }
+    
     private let resultGetter = ResultsGetter()
     
     @IBOutlet weak var inputForSearchTextField: UITextField!
     
     @IBOutlet weak var googleSearchButtonOutlet: UIButton! {
         didSet {
-            searchEndObserver = NotificationCenter.default.addObserver(
+            searchDidEndObserver = NotificationCenter.default.addObserver(
                 forName: .SearchDidEnd,
                 object: nil,
                 queue: OperationQueue.main,
@@ -41,7 +45,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     private var result: Result?
     
-    private var searchEndObserver: NSObjectProtocol?
+    private var searchDidEndObserver: NSObjectProtocol?
+    private var searchShouldEndObserver: NSObjectProtocol?
+    private var errorInRequestObserver: NSObjectProtocol?
     
     // MARK: Table View Data Source
     
@@ -77,37 +83,40 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if let observer = searchEndObserver {
-            NotificationCenter.default.removeObserver(observer)
+        if let searchDidEndObserver = searchDidEndObserver, let searchShouldEndObserver = searchShouldEndObserver {
+            NotificationCenter.default.removeObserver(searchDidEndObserver)
+            NotificationCenter.default.removeObserver(searchShouldEndObserver)
         }
     }
     
-    private func showErrorAlert(errorCode: String) {
+    private func showErrorAlert(error: Error) {
         
-        if errorCode == "400" {
+        switch error {
+            
+        case invalidInput.badInput:
             let alert = UIAlertController(
                 title: "Search failed",
-                message: "Couldn't read text from the search field",
+                message: "Couldn't read text from the search field or the search field is empty. Try another keyword",
                 preferredStyle: .alert
             )
-            
             alert.addAction(UIAlertAction(
                 title: "OK",
                 style: .default
             ))
-            
             present(alert, animated: true)
-        } else {
+            
+        default:
             let alert = UIAlertController(
                 title: "Search failed",
-                message: "Couldn't read text from the search field",
+                message: "",
                 preferredStyle: .alert
             )
-            
             alert.addAction(UIAlertAction(
                 title: "OK",
                 style: .default
             ))
+            present(alert, animated: true)
+            
         }
     }
     
@@ -136,6 +145,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // Check for valid & empty string and init model
     private func startSearch(for inputForSearch: UITextField) {
         googleSearchButtonOutlet.setTitle("Stop", for: [])
+        errorInRequestObserver = NotificationCenter.default.addObserver(
+            forName: .ErrorInRequestIsHappened,
+            object: nil,
+            queue: nil,
+            using: { notification in
+                if let error = notification.userInfo?.values.first as? Error {
+                    self.showErrorAlert(error: error)
+                } else {
+                    print("Can't read the error")
+                }
+        })
         
         if let inputForSearch = inputForSearchTextField.text {
             let inputWithoutWhipespaces = inputForSearch.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -143,7 +163,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 result = Result(for: inputWithoutWhipespaces)
                 result?.delegate = self
             } else {
-                showErrorAlert(errorCode: "400")
+                showErrorAlert(error: invalidInput.badInput)
             }
         }
     }
