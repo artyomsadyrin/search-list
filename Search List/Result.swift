@@ -15,50 +15,59 @@ protocol ResultDelegate: class {
 
 class Result
 {
+    // MARK: Properties
+    
     let inputForSearch: String
     var links: [String]?
     var totalResults: Int?
-    var failed: Bool
+    var isFailed: Bool
     weak var delegate: ResultDelegate?
+    
+    //MARK: Init
     
     init(for inputForSearch: String) {
         self.inputForSearch = inputForSearch
-        failed = false
+        isFailed = false
         getSearchResults(for: inputForSearch)
     }
     
-    func getSearchResults(for inputForSearch: String) {
+    //MARK: Instance methods
+    
+    private func getSearchResults(for inputForSearch: String) {
         
         let resultGetter = ResultsGetter()
         
         resultGetter.getJSONFromSearchResults(for: inputForSearch) { (jsonResults) in
             guard let jsonResults = jsonResults else {
-                self.failed = true
+                self.isFailed = true
                 return
             }
             
-            if let data = jsonResults.data(using: .utf8) {
-                if let json = try? JSON(data: data) {
-                    
-                    let totalResultsFromJSON = json["searchInformation"]["totalResults"].stringValue
-                    if let totalResultsInInt = Int(totalResultsFromJSON) {
-                        // Temp solution
-                        self.totalResults = 10
-                        //self.totalResults = totalResultsInInt
-                        self.delegate?.updateSearchResultTableView()
-                        print("Total Results: \(String(describing: self.totalResults))")
-                    } else {
-                        print("Can't get total results.")
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                // Read JSON from the Custom Search JSON API and set a model's properties
+                if let data = jsonResults.data(using: .utf8) {
+                    if let json = try? JSON(data: data) {
+                        
+                        // In case if i will need totalResults from API
+                        let totalResultsFromJSON = json["searchInformation"]["totalResults"].stringValue
+                        if let totalResultsInInt = Int(totalResultsFromJSON) {
+                            self?.totalResults = totalResultsInInt
+                            print("Total Results: \(String(describing: self?.totalResults))")
+                        } else {
+                            print("Can't get total results.")
+                        }
+                        
+                        let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }
+                        self?.links = linksFromJSON
+                        DispatchQueue.main.async {
+                            self?.delegate?.updateSearchResultTableView()
+                        }
+                        print("Links:\n\(String(describing: self?.links))")
                     }
-                    
-                    let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }
-                    self.links = linksFromJSON
-                    self.delegate?.updateSearchResultTableView()
-                    print("Links:\n\(String(describing: self.links))")
+                }
             }
         }
+        
     }
-    
-}
 }
 

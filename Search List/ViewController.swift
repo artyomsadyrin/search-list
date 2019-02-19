@@ -34,7 +34,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: Table View Data Source
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return result?.totalResults ?? 0
+        return result?.links?.count ?? 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -53,6 +53,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: Text Field Delegate
     
+    // Hide keyboard by press a return button and starting a search
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         startSearch(for: textField)
@@ -62,6 +63,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: General Methods
     
     private func showErrorAlert(errorCode: String) {
+        
         if errorCode == "400" {
             let alert = UIAlertController(
                 title: "Search failed",
@@ -91,8 +93,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        updateSearchResultTableView()
+        //updateSearchResultTableView()
     }
+    
+    // MARK: Custom Delegate
     
     func updateSearchResultTableView() {
         searchResultTableView.reloadData()
@@ -104,6 +108,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         startSearch(for: inputForSearchTextField)
     }
     
+    // Check for valid & empty string and init model
     private func startSearch(for inputForSearch: UITextField) {
         if let inputForSearch = inputForSearchTextField.text, !inputForSearch.isEmpty {
             result = Result(for: inputForSearch)
@@ -115,9 +120,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 }
 
+// MARK: Extenstions
 
 extension UIButton
 {
+    // Made a "Google Search" button a little rounding and add border
     @IBInspectable var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius
