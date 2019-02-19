@@ -25,23 +25,27 @@ class ResultsGetter
         request.httpMethod = "GET"
         request.setValue(bundleId, forHTTPHeaderField: "X-Ios-Bundle-Identifier")
         
-        let session = URLSession.shared
-        
-        // Get a JSON from the Custom Search JSON API
-        let datatask = session.dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
-            if let error = error {
-                print("Error:\n\(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    completionHandler(error.localizedDescription)
-                }
-            } else {
-                let dataString = String(data: data!, encoding: String.Encoding.utf8)!
-                print("JSON Result\n\(String(describing: dataString))")
-                DispatchQueue.main.async {
-                    completionHandler(dataString)
+        DispatchQueue.global(qos: .default).async {
+            let session = URLSession.shared
+            
+            // Get a JSON from the Custom Search JSON API
+            let datatask = session.dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
+                if let error = error {
+                    print("Error:\n\(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        completionHandler(error.localizedDescription)
+                    }
+                } else {
+                    let dataString = String(data: data!, encoding: String.Encoding.utf8)!
+                    print("JSON Result\n\(String(describing: dataString))")
+                    DispatchQueue.main.async {
+                        completionHandler(dataString)
+                    }
                 }
             }
+            datatask.resume()
         }
-        datatask.resume()
+        
+        
     }
 }
