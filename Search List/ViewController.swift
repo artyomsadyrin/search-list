@@ -25,11 +25,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var inputForSearchTextField: UITextField!
     
-    @IBOutlet weak var googleSearchButtonOutlet: UIButton!
+    @IBOutlet weak var googleSearchButtonOutlet: UIButton! {
+        didSet {
+            searchStartObserver = NotificationCenter.default.addObserver(
+                forName: .SearchDidStart,
+                object: nil,
+                queue: OperationQueue.main,
+                using: { notification in
+                    self.googleSearchButtonOutlet.setTitle("Stop", for: [])
+            }
+            )
+        }
+    }
     
     @IBOutlet weak var searchResultTableView: UITableView!
     
     private var result: Result?
+    
+    private var searchStartObserver: NSObjectProtocol?
     
     // MARK: Table View Data Source
     
@@ -61,6 +74,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     // MARK: General Methods
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if let observer = searchStartObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
     
     private func showErrorAlert(errorCode: String) {
         
@@ -110,13 +131,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // Check for valid & empty string and init model
     private func startSearch(for inputForSearch: UITextField) {
-        if let inputForSearch = inputForSearchTextField.text, !inputForSearch.isEmpty {
-            result = Result(for: inputForSearch)
-            result?.delegate = self
-        } else {
-            showErrorAlert(errorCode: "400")
+        NotificationCenter.default.post(name: .SearchDidStart, object: nil)
+        
+        if let inputForSearch = inputForSearchTextField.text {
+            let inputWithoutWhipespaces = inputForSearch.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !inputWithoutWhipespaces.isEmpty {
+                result = Result(for: inputWithoutWhipespaces)
+                result?.delegate = self
+            } else {
+                showErrorAlert(errorCode: "400")
+            }
         }
-        searchResultTableView.reloadData()
     }
 }
 
@@ -154,4 +179,6 @@ extension UIButton
     }
 }
 
-
+extension Notification.Name {
+    static let SearchDidStart = Notification.Name("SearchDidStart")
+}

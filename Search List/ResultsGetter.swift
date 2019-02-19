@@ -30,6 +30,7 @@ class ResultsGetter
             
             // Get a JSON from the Custom Search JSON API
             let datatask = session.dataTask(with: request as URLRequest) { (data: Data?, response: URLResponse?, error: Error?) in
+                
                 if let error = error {
                     print("Error:\n\(error.localizedDescription)")
                     DispatchQueue.main.async {
@@ -49,3 +50,5 @@ class ResultsGetter
         
     }
 }
+
+
