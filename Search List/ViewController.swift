@@ -64,7 +64,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     private func showErrorAlert() {
         let alert = UIAlertController(
             title: "Search failed",
-            message: "Couldn't read text from search field",
+            message: "Couldn't read text from the search field",
             preferredStyle: .alert
         )
         
@@ -84,7 +84,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     private func startSearch(for inputForSearch: UITextField) {
         searchResults = [String]()
-        if let inputForSearch = inputForSearchTextField.text {
+        if let inputForSearch = inputForSearchTextField.text, !inputForSearch.isEmpty {
             resultGetter.getResults(for: inputForSearch) { (rawData) in
                 print("OK")
             }
