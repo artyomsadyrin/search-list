@@ -40,6 +40,7 @@ class ResultsGetter
                     let dataString = String(data: data!, encoding: String.Encoding.utf8)!
                     print("JSON Result\n\(String(describing: dataString))")
                     DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
                         completionHandler(dataString)
                     }
                 }
@@ -51,4 +52,6 @@ class ResultsGetter
     }
 }
 
-
+extension Notification.Name {
+    static let SearchDidEnd = Notification.Name("SearchDidEnd")
+}

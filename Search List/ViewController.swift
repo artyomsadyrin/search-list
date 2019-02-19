@@ -27,12 +27,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var googleSearchButtonOutlet: UIButton! {
         didSet {
-            searchStartObserver = NotificationCenter.default.addObserver(
-                forName: .SearchDidStart,
+            searchEndObserver = NotificationCenter.default.addObserver(
+                forName: .SearchDidEnd,
                 object: nil,
                 queue: OperationQueue.main,
                 using: { notification in
-                    self.googleSearchButtonOutlet.setTitle("Stop", for: [])
+                    self.googleSearchButtonOutlet.setTitle("Google Search", for: [])
             }
             )
         }
@@ -42,7 +42,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     private var result: Result?
     
-    private var searchStartObserver: NSObjectProtocol?
+    private var searchEndObserver: NSObjectProtocol?
     
     // MARK: Table View Data Source
     
@@ -78,7 +78,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if let observer = searchStartObserver {
+        if let observer = searchEndObserver {
             NotificationCenter.default.removeObserver(observer)
         }
     }
@@ -131,7 +131,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // Check for valid & empty string and init model
     private func startSearch(for inputForSearch: UITextField) {
-        NotificationCenter.default.post(name: .SearchDidStart, object: nil)
+        googleSearchButtonOutlet.setTitle("Stop", for: [])
         
         if let inputForSearch = inputForSearchTextField.text {
             let inputWithoutWhipespaces = inputForSearch.trimmingCharacters(in: .whitespacesAndNewlines)
