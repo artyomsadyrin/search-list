@@ -10,7 +10,5 @@ import UIKit
 
 class SearchResultTableViewCell: UITableViewCell
 {
-    
     @IBOutlet weak var linkLabel: UILabel!
-
 }

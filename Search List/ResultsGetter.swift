@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class ResultsGetter
 {
-    func getJSONFromSearchResults(for inputForSearch: String, completionHandler: @escaping (String) -> Void) {
+    func getJSONFromSearchResults(for inputForSearch: String, completionHandler: @escaping (String?) -> Void) {
         
         // apiKey and searchEngineId is a private information and not allowed to use without permission. To get yours please visit https://developers.google.com/custom-search/v1/overview
         let apiKey = "AIzaSyBOjLBG5EgXokhtMXjkGfmnQi2gzI2ydO0"
