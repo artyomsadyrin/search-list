@@ -22,6 +22,7 @@ class Result
     var totalResults: Int?
     var isFailed: Bool
     weak var delegate: ResultDelegate?
+    //private var searchShouldEndObserver: NSObjectProtocol?
     
     //MARK: Init
     
@@ -37,17 +38,19 @@ class Result
         
         let resultGetter = ResultsGetter()
         
-        resultGetter.getJSONFromSearchResults(for: inputForSearch) { (jsonResults) in
+        resultGetter.getJSONFromSearchResults(for: inputForSearch) { (jsonResults, error) in
             guard let jsonResults = jsonResults else {
                 self.isFailed = true
                 return
             }
+    
+            // TO-DO: Do I need change some properties to nil here?
             
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 // Read JSON from the Custom Search JSON API and set a model's properties
                 if let data = jsonResults.data(using: .utf8) {
                     if let json = try? JSON(data: data) {
-                        
+                        print("Input for search: --\(String(describing: self?.inputForSearch))--")
                         // In case if i will need totalResults from API
                         let totalResultsFromJSON = json["searchInformation"]["totalResults"].stringValue
                         if let totalResultsInInt = Int(totalResultsFromJSON) {
@@ -62,7 +65,7 @@ class Result
                         DispatchQueue.main.async {
                             self?.delegate?.updateSearchResultTableView()
                         }
-                        print("Links:\n\(String(describing: self?.links))")
+                        print("Links:\n\(String(describing: self?.links))\nLinks Count: \(String(describing: self?.links?.count))")
                     }
                 }
             }
