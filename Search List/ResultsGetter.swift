@@ -20,7 +20,10 @@ class ResultsGetter
         let apiKey = "AIzaSyBOjLBG5EgXokhtMXjkGfmnQi2gzI2ydO0"
         let bundleId = "io.github.artyomsadyrin.Search-List"
         let searchEngineId = "013192253000657877849:nt00ris8vlw"
-        let serverAddress = String(format: "https://www.googleapis.com/customsearch/v1?q=%@&cx=%@&key=%@","\(inputForSearch)", searchEngineId, apiKey)
+        // Index of the first result to return from the search
+        let startIndex = String(6)
+        let numberOfReturningResults = String(5)
+        let serverAddress = String(format: "https://www.googleapis.com/customsearch/v1?q=%@&cx=%@&key=%@&start=%@&num=%@", inputForSearch, searchEngineId, apiKey, startIndex, numberOfReturningResults)
         
         
         let url = serverAddress.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
