@@ -19,17 +19,15 @@ class Result
     
     let inputForSearch: String
     var link: String?
-    var totalResults: Int?
-    var isFailed: Bool
     weak var delegate: ResultDelegate?
-    //private var searchShouldEndObserver: NSObjectProtocol?
+    private var startIndex: Int
     
     //MARK: Init
     
-    init(for inputForSearch: String) {
+    init(for inputForSearch: String, start: Int) {
         self.inputForSearch = inputForSearch
-        isFailed = false
         self.link = String()
+        self.startIndex = start
         getSearchResults(for: inputForSearch)
     }
     
@@ -39,9 +37,8 @@ class Result
         
         let resultGetter = ResultsGetter()
         
-        resultGetter.getJSONFromSearchResults(for: inputForSearch) { (jsonResults, error) in
+        resultGetter.getJSONFromSearchResults(for: inputForSearch, start: startIndex) { (jsonResults, error) in
             guard let jsonResults = jsonResults else {
-                self.isFailed = true
                 return
             }
             
@@ -52,14 +49,6 @@ class Result
                 if let data = jsonResults.data(using: .utf8) {
                     if let json = try? JSON(data: data) {
                         print("Input for search: --\(String(describing: self?.inputForSearch))--")
-                        // In case if i will need totalResults from API
-                        let totalResultsFromJSON = json["searchInformation"]["totalResults"].stringValue
-                        if let totalResultsInInt = Int(totalResultsFromJSON) {
-                            self?.totalResults = totalResultsInInt
-                            print("Total Results: \(String(describing: self?.totalResults))")
-                        } else {
-                            print("Can't get total results.")
-                        }
                         
                         let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }[0]
                         print("linkFromJSON: \(linksFromJSON)")

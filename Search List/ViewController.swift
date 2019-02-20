@@ -42,6 +42,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var searchResultTableView: UITableView!
     
     private var results: [Result?] = [nil]
+    // Don't set to 1
     private let countOfPrinterResults = 2
     private var searchDidEndObserver: NSObjectProtocol?
     private var searchShouldEndObserver: NSObjectProtocol?
@@ -108,7 +109,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         default:
             let alert = UIAlertController(
                 title: "Search failed",
-                message: "",
+                message: "\(error.localizedDescription)",
                 preferredStyle: .alert
             )
             alert.addAction(UIAlertAction(
@@ -162,7 +163,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let inputWithoutWhipespaces = inputForSearch.trimmingCharacters(in: .whitespacesAndNewlines)
             if !inputWithoutWhipespaces.isEmpty {
                 for index in 0..<countOfPrinterResults {
-                    results.append(Result(for: inputWithoutWhipespaces))
+                    results.append(Result(for: inputWithoutWhipespaces, start: index+1))
                     results[index]?.delegate = self
                 }
             } else {
