@@ -10,3 +10,5 @@ Access to Google search results is provided by free version of Google Custom Sea
 - 100 first results in general
 
 By default, number of requests is set to 10 (property countOfRequests in ViewController.swift). In the current version, app can show 1 result per request.
+
+**WARNING! Until 11:00 AM (Minsk) daily limit on requests of my API Key limit will remain exceeded.**
