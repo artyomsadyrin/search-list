@@ -43,7 +43,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     private var result: Result? = nil
   
-    private let countOfRequests = 1
+    private let countOfRequests = 4
 
     private var searchDidEndObserver: NSObjectProtocol?
     private var searchShouldEndObserver: NSObjectProtocol?
