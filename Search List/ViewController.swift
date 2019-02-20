@@ -42,8 +42,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var searchResultTableView: UITableView!
     
     private var result: Result? = nil
-    // Don't set to 1
-    private let countOfRequests = 2
+  
+    private let countOfRequests = 1
 
     private var searchDidEndObserver: NSObjectProtocol?
     private var searchShouldEndObserver: NSObjectProtocol?
