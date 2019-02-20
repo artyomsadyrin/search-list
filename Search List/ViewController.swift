@@ -41,9 +41,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var searchResultTableView: UITableView!
     
-    private var results: [Result?] = [nil]
+    private var result: Result? = nil
     // Don't set to 1
-    private let countOfPrinterResults = 2
+    private let countOfRequests = 2
 
     private var searchDidEndObserver: NSObjectProtocol?
     private var searchShouldEndObserver: NSObjectProtocol?
@@ -52,7 +52,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: Table View Data Source
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return results.count
+        return result?.links.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,9 +61,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? SearchResultTableViewCell  else {
             fatalError("The dequeued cell is not an instance of SearchResultTableViewCell.")
         }
-        let result = results[indexPath.row]
-        
-        let link = result?.link
+        let link = result?.links[indexPath.row]
         
         cell.linkLabel.text = link
         
@@ -163,16 +161,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if let inputForSearch = inputForSearchTextField.text {
             let inputWithoutWhipespaces = inputForSearch.trimmingCharacters(in: .whitespacesAndNewlines)
             if !inputWithoutWhipespaces.isEmpty {
-                for index in 0..<countOfPrinterResults {
-                    results.append(Result(for: inputWithoutWhipespaces, start: index+1))
-                    results[index]?.delegate = self
-                }
-            } else {
-                showErrorAlert(error: searchFailedError.badInput)
+                result = Result(for: inputWithoutWhipespaces, start: countOfRequests)
+                result?.delegate = self
             }
+        } else {
+            showErrorAlert(error: searchFailedError.badInput)
         }
     }
 }
+
 
 // MARK: Extenstions
 
