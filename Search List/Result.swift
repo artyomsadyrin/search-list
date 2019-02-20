@@ -20,16 +20,15 @@ class Result
     let inputForSearch: String
     var link: String?
     var totalResults: Int?
-    var isFailed: Bool
     weak var delegate: ResultDelegate?
-    //private var searchShouldEndObserver: NSObjectProtocol?
+    private var startIndex: Int
     
     //MARK: Init
     
-    init(for inputForSearch: String) {
+    init(for inputForSearch: String, start: Int) {
         self.inputForSearch = inputForSearch
-        isFailed = false
         self.link = String()
+        self.startIndex = start
         getSearchResults(for: inputForSearch)
     }
     
@@ -39,9 +38,8 @@ class Result
         
         let resultGetter = ResultsGetter()
         
-        resultGetter.getJSONFromSearchResults(for: inputForSearch) { (jsonResults, error) in
+        resultGetter.getJSONFromSearchResults(for: inputForSearch, start: startIndex) { (jsonResults, error) in
             guard let jsonResults = jsonResults else {
-                self.isFailed = true
                 return
             }
             

@@ -42,7 +42,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var searchResultTableView: UITableView!
     
     private var results: [Result?] = [nil]
-    private let countOfPrinterResults = 2
+    private let countOfPrinterResults = 3
     private var searchDidEndObserver: NSObjectProtocol?
     private var searchShouldEndObserver: NSObjectProtocol?
     private var errorInRequestObserver: NSObjectProtocol?
@@ -162,7 +162,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let inputWithoutWhipespaces = inputForSearch.trimmingCharacters(in: .whitespacesAndNewlines)
             if !inputWithoutWhipespaces.isEmpty {
                 for index in 0..<countOfPrinterResults {
-                    results.append(Result(for: inputWithoutWhipespaces))
+                    results.append(Result(for: inputWithoutWhipespaces, start: index+1))
                     results[index]?.delegate = self
                 }
             } else {
