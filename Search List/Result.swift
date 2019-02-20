@@ -18,26 +18,29 @@ class Result
     // MARK: Properties
     
     let inputForSearch: String
-    var link: String?
+    var links: [String?]
     weak var delegate: ResultDelegate?
-    private var startIndex: Int
+    private var countOfRequests: Int
+    private var nextPageStartIndex: Int? = 1
     
     //MARK: Init
     
     init(for inputForSearch: String, start: Int) {
         self.inputForSearch = inputForSearch
-        self.link = String()
-        self.startIndex = start
-        getSearchResults(for: inputForSearch)
+        self.links = [String?]()
+        self.countOfRequests = start
+        for index in 0..<countOfRequests {
+            getSearchResults(for: inputForSearch, searchIndex: index + 1)
+        }
     }
     
     //MARK: Instance methods
     
-    private func getSearchResults(for inputForSearch: String) {
+    private func getSearchResults(for inputForSearch: String, searchIndex: Int) {
         
         let resultGetter = ResultsGetter()
         
-        resultGetter.getJSONFromSearchResults(for: inputForSearch, start: startIndex) { (jsonResults, error) in
+        resultGetter.getJSONFromSearchResults(for: inputForSearch, start: searchIndex) { (jsonResults, error) in
             guard let jsonResults = jsonResults else {
                 return
             }
@@ -50,15 +53,23 @@ class Result
                     if let json = try? JSON(data: data) {
                         print("Input for search: --\(String(describing: self?.inputForSearch))--")
                         
-                        let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }[0]
-                        print("linkFromJSON: \(linksFromJSON)")
-                        
-                        self?.link = linksFromJSON
-                        DispatchQueue.main.async {
-                            self?.delegate?.updateSearchResultTableView()
+                        let nextPageStartIndexFromJSON = json["queries"]["nextPage"].arrayValue[0]["startIndex"].stringValue
+                        if let nextPageStartIndexInInt = Int(nextPageStartIndexFromJSON) {
+                            self?.nextPageStartIndex = nextPageStartIndexInInt
+                            print("Next page start index: \(String(describing: self?.nextPageStartIndex))")
+                        } else {
+                            print("Can't get next page start index.")
                         }
                         
-                        print("Links:\n\(String(describing: self?.link))\nLinks Count: \(String(describing: self?.link?.count))")
+                        let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }
+                        print("linkFromJSON: \(linksFromJSON)")
+                        for link in linksFromJSON {
+                            self?.links.append(link)
+                            DispatchQueue.main.async {
+                                self?.delegate?.updateSearchResultTableView()
+                            }
+                        }
+                        print("Links:\n\(String(describing: self?.links))\nLinks Count: \(String(describing: self?.links.count))")
                     }
                 }
             }
