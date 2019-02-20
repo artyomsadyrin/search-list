@@ -43,8 +43,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var searchResultTableView: UITableView!
     
-    private var searchResult = [SearchResult]()
-    private var countOfPrintedResults = 3
+    private var result: Result?
+    
     private var searchDidEndObserver: NSObjectProtocol?
     private var searchShouldEndObserver: NSObjectProtocol?
     private var errorInRequestObserver: NSObjectProtocol?
@@ -52,19 +52,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: Table View Data Source
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchResult.count
+        return result?.links?.count ?? 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "SearchResultTableViewCell"
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? SearchResultTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? SearchResultTableViewCell  else {
             fatalError("The dequeued cell is not an instance of SearchResultTableViewCell.")
         }
         
-        let result = searchResult[indexPath.row]
+        let link = result?.links?[indexPath.row]
         
-        cell.linkLabel.text = result.link
+        cell.linkLabel.text = link
+        
         return cell
     }
     
@@ -96,7 +97,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         case searchFailedError.badInput:
             let alert = UIAlertController(
                 title: "Search failed",
-                message: "Couldn't read text from the search field. Try another keyword",
+                message: "Couldn't read text from the search field or the search field is empty. Try another keyword",
                 preferredStyle: .alert
             )
             alert.addAction(UIAlertAction(
@@ -149,7 +150,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         errorInRequestObserver = NotificationCenter.default.addObserver(
             forName: .ErrorInRequestIsHappened,
             object: nil,
-            queue: OperationQueue.main,
+            queue: nil,
             using: { notification in
                 if let error = notification.userInfo?.values.first as? Error {
                     self.showErrorAlert(error: error)
@@ -161,9 +162,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if let inputForSearch = inputForSearchTextField.text {
             let inputWithoutWhipespaces = inputForSearch.trimmingCharacters(in: .whitespacesAndNewlines)
             if !inputWithoutWhipespaces.isEmpty {
-                for index in 1...countOfPrintedResults {
-                    searchResult.append(SearchResult(for: inputWithoutWhipespaces, start: index))
-                }
+                result = Result(for: inputWithoutWhipespaces)
+                result?.delegate = self
             } else {
                 showErrorAlert(error: searchFailedError.badInput)
             }
@@ -207,6 +207,4 @@ extension UIButton
 
 extension Notification.Name {
     static let SearchShouldEnd = Notification.Name("SearchShouldEnd")
-    static let SearchDidEnd = Notification.Name("SearchDidEnd")
-    static let ErrorInRequestIsHappened = Notification.Name("ErrorInRequestIsHappened")
 }

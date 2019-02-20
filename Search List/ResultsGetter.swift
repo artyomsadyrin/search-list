@@ -14,15 +14,15 @@ class ResultsGetter
     private var currentDataTask: URLSessionTask?
     private var searchShouldEndObserver: NSObjectProtocol?
     
-    func getJSONFromSearchResults(for inputForSearch: String, start: Int, completionHandler: @escaping (String?) -> Void) {
+    func getJSONFromSearchResults(for inputForSearch: String, completionHandler: @escaping (String?, Error?) -> Void) {
         
-        // apiKey and searchEngineId is a private information and not allowed to use without permission. Max 100 queries per day. To get yours please visit https://developers.google.com/custom-search/v1/overview
+        // apiKey and searchEngineId is a private information and not allowed to use without permission. To get yours please visit https://developers.google.com/custom-search/v1/overview
         let apiKey = "AIzaSyBOjLBG5EgXokhtMXjkGfmnQi2gzI2ydO0"
         let bundleId = "io.github.artyomsadyrin.Search-List"
         let searchEngineId = "013192253000657877849:nt00ris8vlw"
-        // Index of the first result from the search. Max = 100
-        let startIndex = String(start)
-        let numberOfReturningResults = String(1)
+        // Index of the first result to return from the search. Max = 100
+        let startIndex = String(1)
+        let numberOfReturningResults = String(10)
         let serverAddress = String(format: "https://www.googleapis.com/customsearch/v1?q=%@&cx=%@&key=%@&start=%@&num=%@", inputForSearch, searchEngineId, apiKey, startIndex, numberOfReturningResults)
         
         
@@ -41,7 +41,7 @@ class ResultsGetter
                 self?.searchShouldEndObserver = NotificationCenter.default.addObserver(
                     forName: .SearchShouldEnd,
                     object: nil,
-                    queue: OperationQueue.main,
+                    queue: nil,
                     using: { notification in
                         self?.currentDataTask?.cancel()
                 })
@@ -50,7 +50,7 @@ class ResultsGetter
                     let postedError: [String: Error] = [error.localizedDescription: error]
                     print("Error:\n\(String(describing: postedError.keys.first))")
                     DispatchQueue.main.async {
-                        completionHandler(nil)
+                        completionHandler(nil, error)
                         NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
                         NotificationCenter.default.post(name: .ErrorInRequestIsHappened, object: nil, userInfo: postedError)
                     }
@@ -59,7 +59,7 @@ class ResultsGetter
                     print("JSON Result\n\(String(describing: dataString))")
                     DispatchQueue.main.async {
                         NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
-                        completionHandler(dataString)
+                        completionHandler(dataString, nil)
                     }
                 }
             }
@@ -67,4 +67,9 @@ class ResultsGetter
             datatask.resume()
         }
     }
+}
+
+extension Notification.Name {
+    static let SearchDidEnd = Notification.Name("SearchDidEnd")
+    static let ErrorInRequestIsHappened = Notification.Name("ErrorInRequestIsHappened")
 }
