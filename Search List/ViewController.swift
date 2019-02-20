@@ -25,8 +25,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         case badInput
     }
     
-    private let resultGetter = ResultsGetter()
-    
     @IBOutlet weak var inputForSearchTextField: UITextField!
     
     @IBOutlet weak var googleSearchButtonOutlet: UIButton! {
@@ -43,8 +41,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var searchResultTableView: UITableView!
     
-    private var result: Result?
-    
+    private var results: [Result?] = [nil]
+    private let countOfPrinterResults = 2
     private var searchDidEndObserver: NSObjectProtocol?
     private var searchShouldEndObserver: NSObjectProtocol?
     private var errorInRequestObserver: NSObjectProtocol?
@@ -52,7 +50,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: Table View Data Source
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return result?.links?.count ?? 1
+        return results.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,8 +59,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? SearchResultTableViewCell  else {
             fatalError("The dequeued cell is not an instance of SearchResultTableViewCell.")
         }
+        let result = results[indexPath.row]
         
-        let link = result?.links?[indexPath.row]
+        let link = result?.link
         
         cell.linkLabel.text = link
         
@@ -162,8 +161,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if let inputForSearch = inputForSearchTextField.text {
             let inputWithoutWhipespaces = inputForSearch.trimmingCharacters(in: .whitespacesAndNewlines)
             if !inputWithoutWhipespaces.isEmpty {
-                result = Result(for: inputWithoutWhipespaces)
-                result?.delegate = self
+                for index in 0..<countOfPrinterResults {
+                    results.append(Result(for: inputWithoutWhipespaces))
+                    results[index]?.delegate = self
+                }
             } else {
                 showErrorAlert(error: searchFailedError.badInput)
             }

@@ -18,7 +18,7 @@ class Result
     // MARK: Properties
     
     let inputForSearch: String
-    var links: [String]?
+    var link: String?
     var totalResults: Int?
     var isFailed: Bool
     weak var delegate: ResultDelegate?
@@ -29,6 +29,7 @@ class Result
     init(for inputForSearch: String) {
         self.inputForSearch = inputForSearch
         isFailed = false
+        self.link = String()
         getSearchResults(for: inputForSearch)
     }
     
@@ -43,7 +44,7 @@ class Result
                 self.isFailed = true
                 return
             }
-    
+            
             // TO-DO: Do I need change some properties to nil here?
             
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -60,12 +61,15 @@ class Result
                             print("Can't get total results.")
                         }
                         
-                        let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }
-                        self?.links = linksFromJSON
+                        let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }[0]
+                        print("linkFromJSON: \(linksFromJSON)")
+                        
+                        self?.link = linksFromJSON
                         DispatchQueue.main.async {
                             self?.delegate?.updateSearchResultTableView()
                         }
-                        print("Links:\n\(String(describing: self?.links))\nLinks Count: \(String(describing: self?.links?.count))")
+                        
+                        print("Links:\n\(String(describing: self?.link))\nLinks Count: \(String(describing: self?.link?.count))")
                     }
                 }
             }
