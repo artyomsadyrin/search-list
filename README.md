@@ -1,5 +1,5 @@
 # search-list
-App use CocoaPods. To run the project you need to install dependencies.
+App use CocoaPods. To run the project you need to install dependencies and always open the Xcode workspace.
 ```
 $ pod install
 ```
