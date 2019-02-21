@@ -7,7 +7,6 @@ Access to Google search results is provided by free version of Google Custom Sea
 
 - 100 requests per day (resets at midnight Pacific Time)
 - 10 results per request
-- 100 first results in general
 
 Custom Search Engine includes the following sites:
 
