@@ -18,5 +18,3 @@ Custom Search Engine includes the following sites:
 - [dev.by](https://dev.by)
 
 By default, number of requests is set to 10 (property countOfRequests in ViewController.swift). In the current version, app can show 1 result per request.
-
-**WARNING! Until 11:00 AM (Minsk) daily limit on requests will remain exceeded.**
