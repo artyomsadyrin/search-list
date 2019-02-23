@@ -10,14 +10,6 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, ResultDelegate
 {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        searchResultTableView.dataSource = self
-        searchResultTableView.delegate = self
-        inputForSearchTextField.delegate = self
-    }
     
     // MARK: Properties
     
@@ -78,6 +70,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     // MARK: General Methods
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        searchResultTableView.dataSource = self
+        searchResultTableView.delegate = self
+        inputForSearchTextField.delegate = self
+        
+        let toolbar:UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0,  width: self.view.frame.size.width, height: 30))
+        //create left side empty space so that "done" button set on right side
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneBtn: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
+        toolbar.setItems([flexSpace, doneBtn], animated: false)
+        toolbar.sizeToFit()
+        //setting toolbar as inputAccessoryView
+        self.inputForSearchTextField.inputAccessoryView = toolbar
+    }
+    
+    @objc private func doneButtonAction() {
+        inputForSearchTextField.resignFirstResponder()
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -164,8 +177,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 result = Result(for: inputWithoutWhipespaces, start: countOfRequests)
                 result?.delegate = self
             }
+            else {
+                showErrorAlert(error: searchFailedError.badInput)
+                NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
+            }
         } else {
             showErrorAlert(error: searchFailedError.badInput)
+            NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
         }
     }
 }

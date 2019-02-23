@@ -21,7 +21,7 @@ class Result
     var links: [String?]
     weak var delegate: ResultDelegate?
     private var countOfRequests: Int
-    private var nextPageStartIndex: Int? = 1
+    static private var nextPageStartIndex: Int?
     
     //MARK: Init
     
@@ -55,10 +55,8 @@ class Result
                         
                         let nextPageStartIndexFromJSON = json["queries"]["nextPage"].arrayValue[0]["startIndex"].stringValue
                         if let nextPageStartIndexInInt = Int(nextPageStartIndexFromJSON) {
-                            self?.nextPageStartIndex = nextPageStartIndexInInt
-                            print("Next page start index: \(String(describing: self?.nextPageStartIndex))")
-                        } else {
-                            print("Can't get next page start index.")
+                            Result.nextPageStartIndex = nextPageStartIndexInInt
+                            print("Next page start index: \(String(describing: Result.nextPageStartIndex))")
                         }
                         
                         let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }
