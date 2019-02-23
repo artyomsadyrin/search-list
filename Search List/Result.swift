@@ -29,8 +29,8 @@ class Result
         self.inputForSearch = inputForSearch
         self.links = [String?]()
         self.countOfRequests = start
-        for _ in 0..<countOfRequests {
-            getSearchResults(for: inputForSearch, searchIndex: Result.nextPageStartIndex ?? 1)
+        for index in 0..<countOfRequests {
+            getSearchResults(for: inputForSearch, searchIndex: index + 1)
         }
     }
     
@@ -57,8 +57,6 @@ class Result
                         if let nextPageStartIndexInInt = Int(nextPageStartIndexFromJSON) {
                             Result.nextPageStartIndex = nextPageStartIndexInInt
                             print("Next page start index: \(String(describing: Result.nextPageStartIndex))")
-                        } else {
-                            print("Can't get next page start index.")
                         }
                         
                         let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }

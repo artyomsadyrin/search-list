@@ -22,7 +22,7 @@ class ResultsGetter
         let searchEngineId = "013192253000657877849:nt00ris8vlw"
         // Index of the result from the search. Max = 100
         let startIndex = String(start)
-        let numberOfReturningResults = String(7)
+        let numberOfReturningResults = String(1)
         let serverAddress = String(format: "https://www.googleapis.com/customsearch/v1?q=%@&cx=%@&key=%@&start=%@&num=%@", inputForSearch, searchEngineId, apiKey, startIndex, numberOfReturningResults)
         
         
