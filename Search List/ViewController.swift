@@ -35,7 +35,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     private var result: Result? = nil
   
-    private let countOfRequests = 10
+    private let countOfRequests = 3
 
     private var searchDidEndObserver: NSObjectProtocol?
     private var searchShouldEndObserver: NSObjectProtocol?
@@ -102,6 +102,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    private func showErrorInRequestAlert(error: NSError) {
+        let alert = UIAlertController(
+            title: "Search failed",
+            message: "Connection error: \(error.code)",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(
+            title: "OK",
+            style: .default
+        ))
+        present(alert, animated: true)
+    }
+
+    
     private func showErrorAlert(error: Error) {
         
         switch error {
@@ -109,7 +123,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         case searchFailedError.badInput:
             let alert = UIAlertController(
                 title: "Search failed",
-                message: "Couldn't read text from the search field or the search field is empty. Try another keyword",
+                message: "Couldn't read text from the search field. Try another keyword",
                 preferredStyle: .alert
             )
             alert.addAction(UIAlertAction(
@@ -164,8 +178,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             object: nil,
             queue: nil,
             using: { notification in
-                if let error = notification.userInfo?.values.first as? Error {
-                    self.showErrorAlert(error: error)
+                if let error = notification.userInfo?.values.first as? NSError {
+                    self.showErrorInRequestAlert(error: error)
                 } else {
                     print("Can't read the error")
                 }
@@ -176,6 +190,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if !inputWithoutWhipespaces.isEmpty {
                 result = Result(for: inputWithoutWhipespaces, start: countOfRequests)
                 result?.delegate = self
+                
+                searchShouldEndObserver = NotificationCenter.default.addObserver(
+                    forName: .SearchShouldEnd,
+                    object: nil,
+                    queue: OperationQueue.main,
+                    using: { notification in
+                        self.searchResultTableView.reloadData()
+                })
             }
             else {
                 showErrorAlert(error: searchFailedError.badInput)

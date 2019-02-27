@@ -21,7 +21,8 @@ class Result
     var links: [String?]
     weak var delegate: ResultDelegate?
     private var countOfRequests: Int
-    static private var nextPageStartIndex: Int?
+    private var nextPageStartIndex: Int?
+    private var searchShouldEndObserver: NSObjectProtocol?
     
     //MARK: Init
     
@@ -40,6 +41,14 @@ class Result
         
         let resultGetter = ResultsGetter()
         
+        searchShouldEndObserver = NotificationCenter.default.addObserver(
+            forName: .SearchShouldEnd,
+            object: nil,
+            queue: OperationQueue.main,
+            using: { notification in
+                self.links = [nil]
+        })
+        
         resultGetter.getJSONFromSearchResults(for: inputForSearch, start: searchIndex) { (jsonResults, error) in
             guard let jsonResults = jsonResults else {
                 return
@@ -47,16 +56,17 @@ class Result
             
             // TO-DO: Do I need change some properties to nil here?
             
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 // Read JSON from the Custom Search JSON API and set a model's properties
                 if let data = jsonResults.data(using: .utf8) {
                     if let json = try? JSON(data: data) {
                         print("Input for search: --\(String(describing: self?.inputForSearch))--")
+                        print("Reading from JSON Current Thread: \(Thread.current)")
                         
                         let nextPageStartIndexFromJSON = json["queries"]["nextPage"].arrayValue[0]["startIndex"].stringValue
                         if let nextPageStartIndexInInt = Int(nextPageStartIndexFromJSON) {
-                            Result.nextPageStartIndex = nextPageStartIndexInInt
-                            print("Next page start index: \(String(describing: Result.nextPageStartIndex))")
+                            self?.nextPageStartIndex = nextPageStartIndexInInt
+                            print("Next page start index: \(String(describing: self?.nextPageStartIndex))")
                         }
                         
                         let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }

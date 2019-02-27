@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftyJSON
 
 class ResultsGetter
 {
@@ -32,7 +31,7 @@ class ResultsGetter
         request.httpMethod = "GET"
         request.setValue(bundleId, forHTTPHeaderField: "X-Ios-Bundle-Identifier")
         
-        DispatchQueue.global(qos: .default).async { [weak self] in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let session = URLSession.shared
             
             // Get a JSON from the Custom Search JSON API
@@ -46,8 +45,8 @@ class ResultsGetter
                         self?.currentDataTask?.cancel()
                 })
                 
-                if let error = error {
-                    let postedError: [String: Error] = [error.localizedDescription: error]
+                if let error = error as NSError? {
+                    let postedError: [String: NSError] = [error.localizedDescription: error]
                     print("Error:\n\(String(describing: postedError.keys.first))")
                     DispatchQueue.main.async {
                         completionHandler(nil, error)
@@ -55,11 +54,15 @@ class ResultsGetter
                         NotificationCenter.default.post(name: .ErrorInRequestIsHappened, object: nil, userInfo: postedError)
                     }
                 } else {
-                    let dataString = String(data: data!, encoding: String.Encoding.utf8)!
-                    print("JSON Result\n\(String(describing: dataString))")
-                    DispatchQueue.main.async {
-                        NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
-                        completionHandler(dataString, nil)
+                    if let data = data {
+                        if let dataString = String(data: data, encoding: String.Encoding.utf8) {
+                            print("JSON Result\n\(String(describing: dataString))")
+                            print("ResultGetter Current Thread: \(Thread.current)")
+                            DispatchQueue.main.async {
+                                NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
+                                completionHandler(dataString, nil)
+                            }
+                        }
                     }
                 }
             }
