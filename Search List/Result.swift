@@ -22,6 +22,7 @@ class Result
     weak var delegate: ResultDelegate?
     private var countOfRequests: Int
     private var nextPageStartIndex: Int?
+    private var searchShouldEndObserver: NSObjectProtocol?
     
     //MARK: Init
     
@@ -39,6 +40,14 @@ class Result
     private func getSearchResults(for inputForSearch: String, searchIndex: Int) {
         
         let resultGetter = ResultsGetter()
+        
+        searchShouldEndObserver = NotificationCenter.default.addObserver(
+            forName: .SearchShouldEnd,
+            object: nil,
+            queue: OperationQueue.main,
+            using: { notification in
+                self.links = [nil]
+        })
         
         resultGetter.getJSONFromSearchResults(for: inputForSearch, start: searchIndex) { (jsonResults, error) in
             guard let jsonResults = jsonResults else {

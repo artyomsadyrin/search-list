@@ -190,6 +190,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if !inputWithoutWhipespaces.isEmpty {
                 result = Result(for: inputWithoutWhipespaces, start: countOfRequests)
                 result?.delegate = self
+                
+                searchShouldEndObserver = NotificationCenter.default.addObserver(
+                    forName: .SearchShouldEnd,
+                    object: nil,
+                    queue: OperationQueue.main,
+                    using: { notification in
+                        self.searchResultTableView.reloadData()
+                })
             }
             else {
                 showErrorAlert(error: searchFailedError.badInput)
