@@ -102,10 +102,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    private func showErrorInRequestAlert(error: NSError) {
+    private func showNSErrorAlert(error: NSError) {
         let alert = UIAlertController(
             title: "Search failed",
-            message: "Connection error: \(error.code)",
+            message: "Connection error: \(error.code)\n\(error.localizedDescription)",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(
@@ -179,7 +179,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             queue: nil,
             using: { notification in
                 if let error = notification.userInfo?.values.first as? NSError {
-                    self.showErrorInRequestAlert(error: error)
+                    self.showNSErrorAlert(error: error)
                 } else {
                     print("Can't read the error")
                 }
