@@ -45,8 +45,8 @@ class ResultsGetter
                         self?.currentDataTask?.cancel()
                 })
                 
-                if let error = error {
-                    let postedError: [String: Error] = [error.localizedDescription: error]
+                if let error = error as NSError? {
+                    let postedError: [String: NSError] = [error.localizedDescription: error]
                     print("Error:\n\(String(describing: postedError.keys.first))")
                     DispatchQueue.main.async {
                         completionHandler(nil, error)
