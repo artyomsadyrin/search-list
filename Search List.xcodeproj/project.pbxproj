@@ -78,11 +78,10 @@
 			isa = PBXGroup;
 			children = (
 				8E82CE572355A18D003D9F0F /* Model */,
-				8E82CE592355A1B8003D9F0F /* Controller */,
 				8E82CE582355A1AF003D9F0F /* View */,
+				8E82CE592355A1B8003D9F0F /* Controller */,
 				8E82CE5D2355A4C0003D9F0F /* Services */,
 				8E82CE5A2355A1C7003D9F0F /* Supporting Files */,
-				8E5AC6E9221AA3C90057AECD /* Info.plist */,
 			);
 			path = "Search List";
 			sourceTree = "<group>";
@@ -100,7 +99,6 @@
 			children = (
 				8E5AC6EF221AADE30057AECD /* SearchResultTableViewCell.swift */,
 				8E5AC6E1221AA3C50057AECD /* Main.storyboard */,
-				8E5AC6E6221AA3C90057AECD /* LaunchScreen.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -116,9 +114,11 @@
 		8E82CE5A2355A1C7003D9F0F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8E5AC6E6221AA3C90057AECD /* LaunchScreen.storyboard */,
 				8E82CE5B2355A20D003D9F0F /* Default-568h@2x.png */,
 				8E5AC6E4221AA3C90057AECD /* Assets.xcassets */,
 				8E5AC6DD221AA3C50057AECD /* AppDelegate.swift */,
+				8E5AC6E9221AA3C90057AECD /* Info.plist */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -410,7 +410,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8LSCB2ZP9M;
-				INFOPLIST_FILE = "Search List/Info.plist";
+				INFOPLIST_FILE = "Search List/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -429,7 +429,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8LSCB2ZP9M;
-				INFOPLIST_FILE = "Search List/Info.plist";
+				INFOPLIST_FILE = "Search List/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
