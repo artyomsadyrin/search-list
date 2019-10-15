@@ -56,6 +56,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		8E1478062355B0F400285E8B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8E9E59A4221AF77B00E7F73A /* SearchResultsGetter.swift */,
+			);
+			name = Services;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		8E5AC6D1221AA3C50057AECD = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +89,7 @@
 				8E82CE572355A18D003D9F0F /* Model */,
 				8E82CE582355A1AF003D9F0F /* View */,
 				8E82CE592355A1B8003D9F0F /* Controller */,
+				8E1478062355B0F400285E8B /* Services */,
 				8E82CE5A2355A1C7003D9F0F /* Supporting Files */,
 			);
 			path = "Search List";
@@ -89,7 +99,6 @@
 			isa = PBXGroup;
 			children = (
 				8E8ECFC2221C00BF00C5AFB2 /* SearchResult.swift */,
-				8E9E59A4221AF77B00E7F73A /* SearchResultsGetter.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
