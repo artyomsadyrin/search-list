@@ -13,14 +13,14 @@ class ResultsGetter
     private var currentDataTask: URLSessionTask?
     private var searchShouldEndObserver: NSObjectProtocol?
     
-    func getJSONFromSearchResults(for inputForSearch: String, start: Int, completionHandler: @escaping (String?, Error?) -> Void) {
+    func getJSONFromSearchResults(for inputForSearch: String, start: Int, completionHandler: @escaping (Result<String, NSError>) -> Void) {
         
         // apiKey and searchEngineId is a private information and not allowed to use without permission. To get yours please visit https://developers.google.com/custom-search/v1/overview
         #error("Need to add your API Key")
-        let apiKey = "YOUR_API_KEY"
+        let apiKey = ""
         let bundleId = "io.github.artyomsadyrin.Search-List"
         #error("Need to add your Search Engine ID")
-        let searchEngineId = "YOUR_SEARCH_ENGINE_ID"
+        let searchEngineId = ""
         // Index of the result from the search. Max = 100
         let startIndex = String(start)
         let numberOfReturningResults = String(1)
@@ -51,7 +51,7 @@ class ResultsGetter
                     let postedError: [String: NSError] = [error.localizedDescription: error]
                     print("Error:\n\(String(describing: postedError.keys.first))")
                     DispatchQueue.main.async {
-                        completionHandler(nil, error)
+                        completionHandler(.failure(error))
                         NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
                         NotificationCenter.default.post(name: .ErrorInRequestIsHappened, object: nil, userInfo: postedError)
                     }
@@ -62,7 +62,7 @@ class ResultsGetter
                             print("ResultGetter Current Thread: \(Thread.current)")
                             DispatchQueue.main.async {
                                 NotificationCenter.default.post(name: .SearchDidEnd, object: nil)
-                                completionHandler(dataString, nil)
+                                completionHandler(.success(dataString))
                             }
                         }
                     }

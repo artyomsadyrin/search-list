@@ -33,7 +33,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var searchResultTableView: UITableView!
     
-    private var result: Result? = nil
+    private var result: SearchResult? = nil
   
     private let countOfRequests = 1
 
@@ -115,7 +115,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         present(alert, animated: true)
     }
 
-    
     private func showErrorAlert(error: Error) {
         
         switch error {
@@ -188,7 +187,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if let inputForSearch = inputForSearchTextField.text {
             let inputWithoutWhipespaces = inputForSearch.trimmingCharacters(in: .whitespacesAndNewlines)
             if !inputWithoutWhipespaces.isEmpty {
-                result = Result(for: inputWithoutWhipespaces, start: countOfRequests)
+                result = SearchResult(for: inputWithoutWhipespaces, start: countOfRequests)
                 result?.delegate = self
                 
                 searchShouldEndObserver = NotificationCenter.default.addObserver(
