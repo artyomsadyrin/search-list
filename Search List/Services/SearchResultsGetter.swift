@@ -17,10 +17,10 @@ class SearchResultsGetter
     func getJSONFromSearchResults(for inputForSearch: String, start: Int, completionHandler: @escaping (Result<String, NSError>) -> Void) {
         
         // apiKey and searchEngineId is a private information and not allowed to use without permission. To get yours please visit https://developers.google.com/custom-search/v1/overview
-        #error("Need to add your API Key")
+        #warning("Need to add your API Key")
         let apiKey = ""
         let bundleId = "io.github.artyomsadyrin.Search-List"
-        #error("Need to add your Search Engine ID")
+        #warning("Need to add your Search Engine ID")
         let searchEngineId = ""
         // Index of the result from the search. Max = 100
         let startIndex = String(start)

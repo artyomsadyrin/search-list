@@ -58,14 +58,8 @@ class SearchResult
                             if let json = try? JSON(data: data) {
                                 print("Reading from JSON Current Thread: \(Thread.current)")
                                 
-                                let nextPageStartIndexFromJSON = json["queries"]["nextPage"].arrayValue[0]["startIndex"].stringValue
-                                if let nextPageStartIndexInInt = Int(nextPageStartIndexFromJSON) {
-                                    self?.nextPageStartIndex = nextPageStartIndexInInt
-                                    print("Next page start index: \(String(describing: self?.nextPageStartIndex))")
-                                }
-                                
                                 let linksFromJSON = json["items"].arrayValue.map{ $0["link"].stringValue }
-                                print("linkFromJSON: \(linksFromJSON)")
+                                
                                 for link in linksFromJSON {
                                     self?.links.append(link)
                                     DispatchQueue.main.async {
