@@ -53,9 +53,7 @@ class Result
             guard let jsonResults = jsonResults else {
                 return
             }
-            
-            // TO-DO: Do I need change some properties to nil here?
-            
+                        
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 // Read JSON from the Custom Search JSON API and set a model's properties
                 if let data = jsonResults.data(using: .utf8) {
