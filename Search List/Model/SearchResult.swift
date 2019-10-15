@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-protocol ResultDelegate: class {
+protocol SearchResultDelegate: class {
     func updateSearchResultTableView()
 }
 
@@ -19,7 +19,7 @@ class SearchResult
     
     let inputForSearch: String
     var links: [String?]
-    weak var delegate: ResultDelegate?
+    weak var delegate: SearchResultDelegate?
     private var countOfRequests: Int
     private var nextPageStartIndex: Int?
     private var searchShouldEndObserver: NSObjectProtocol?
@@ -39,7 +39,7 @@ class SearchResult
     
     private func getSearchResults(for inputForSearch: String, searchIndex: Int) {
         
-        let resultGetter = ResultsGetter()
+        let resultGetter = SearchResultsGetter()
         
         searchShouldEndObserver = NotificationCenter.default.addObserver(
             forName: .SearchShouldEnd,
