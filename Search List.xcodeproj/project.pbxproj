@@ -80,6 +80,7 @@
 				8E82CE572355A18D003D9F0F /* Model */,
 				8E82CE592355A1B8003D9F0F /* Controller */,
 				8E82CE582355A1AF003D9F0F /* View */,
+				8E82CE5D2355A4C0003D9F0F /* Services */,
 				8E82CE5A2355A1C7003D9F0F /* Supporting Files */,
 				8E5AC6E9221AA3C90057AECD /* Info.plist */,
 			);
@@ -90,7 +91,6 @@
 			isa = PBXGroup;
 			children = (
 				8E8ECFC2221C00BF00C5AFB2 /* SearchResult.swift */,
-				8E9E59A4221AF77B00E7F73A /* SearchResultsGetter.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -121,6 +121,14 @@
 				8E5AC6DD221AA3C50057AECD /* AppDelegate.swift */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8E82CE5D2355A4C0003D9F0F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8E9E59A4221AF77B00E7F73A /* SearchResultsGetter.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		ADE518A6B93A1FF2F53217CB /* Pods */ = {
